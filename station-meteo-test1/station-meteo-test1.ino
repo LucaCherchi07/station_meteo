@@ -4,7 +4,7 @@
 
 // Configuration WiFi
 const char* ssid = "Livebox-D820";        // Remplace par le nom de ton réseau Wi-Fi
-const char* password = "qHVd3TjWLvxxcg9rq"; // Remplace par ton mot de passe Wi-Fi
+const char* password = "qHV4d3TjWLvxxcg9rq"; // Remplace par ton mot de passe Wi-Fi
 const char* server = "192.168.1.17"; // Remplace par l'URL de ton script PHP
 
 // Initialisation du capteur DHT11
