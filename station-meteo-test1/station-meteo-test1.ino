@@ -1,11 +1,12 @@
 #include <SPI.h>
 #include <WiFi.h>
 #include <SimpleDHT.h>
+#include "config.h"
 
 // Configuration WiFi
-const char* ssid = "Livebox-D820";        // Remplace par le nom de ton réseau Wi-Fi
-const char* password = "qHV4d3TjWLvxxcg9rq"; // Remplace par ton mot de passe Wi-Fi
-const char* server = "192.168.1.17"; // Remplace par l'URL de ton script PHP
+const char* ssid     = WIFI_SSID;
+const char* password = WIFI_PASSWORD;
+const char* server   = SERVER_IP;
 
 // Initialisation du capteur DHT11
 #define DHT_PIN 2
@@ -101,7 +102,7 @@ void loop() {
     
     // Envoi des données en POST
     client.println("POST /station_meteo/envoi_donnees.php HTTP/1.1");
-    client.println("Host: 192.168.1.17");
+    client.println("Host: " + String(SERVER_IP));
     client.println("Content-Type: application/x-www-form-urlencoded");
     client.println("Connection: close");
     client.print("Content-Length: ");

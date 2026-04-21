@@ -1,0 +1,9 @@
+# Configuration sensible Arduino
+config.h
+
+# Fichiers système Windows
+desktop.ini
+Thumbs.db
+
+# Fichiers système Mac
+.DS_Store

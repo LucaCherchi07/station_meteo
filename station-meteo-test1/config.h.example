@@ -1,0 +1,12 @@
+// config.h.example
+// Copie ce fichier, renomme-le en config.h, et remplis tes vraies valeurs
+// Ce fichier est partagé sur GitHub, pas config.h
+
+#ifndef CONFIG_H
+#define CONFIG_H
+
+#define WIFI_SSID     "TON_SSID"
+#define WIFI_PASSWORD "TON_MOT_DE_PASSE"
+#define SERVER_IP     "TON_IP_SERVEUR"
+
+#endif
