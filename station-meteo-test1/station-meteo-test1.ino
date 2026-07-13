@@ -120,5 +120,5 @@ void loop() {
   }
 
   client.stop(); // Fermer la connexion
-  delay(1000*60); // Attendre 5 minutes avant la prochaine lecture (300 000 ms)
+  delay(1000*300); // Attendre 5 minutes avant la prochaine lecture (300 000 ms)
 }
