@@ -1,6 +1,7 @@
 #include <SPI.h>
 #include <WiFi.h>
 #include <SimpleDHT.h>
+#include <LiquidCrystal.h>
 #include "config.h"
 
 // Configuration WiFi
@@ -11,6 +12,10 @@ const char* server   = SERVER_IP;
 // Initialisation du capteur DHT11
 #define DHT_PIN 2
 SimpleDHT11 dht11(DHT_PIN);
+
+// Initialisation du LCD1602 (mode parallèle 4 bits)
+// RS, E, D4, D5, D6, D7
+LiquidCrystal lcd(7, 8, 9, 10, 11, 12);
 
 WiFiClient client;
 
@@ -25,17 +30,19 @@ const unsigned long postingInterval = 10L * 1000L; // delay between updates, in 
 void setup() {
   //Initialize serial and wait for port to open:
 
-
   Serial.begin(9600);
 
   while (!Serial) {
-
     ; // wait for serial port to connect. Needed for native USB port only
-
   }
 
-  // check for the WiFi module:
+  // Initialisation de l'écran LCD
+  lcd.begin(16, 2);
+  lcd.print("Station Meteo");
+  lcd.setCursor(0, 1);
+  lcd.print("Demarrage...");
 
+  // check for the WiFi module:
 
   if (WiFi.status() == WL_NO_MODULE) {
 
@@ -63,6 +70,9 @@ void setup() {
 
     Serial.println(ssid);
 
+    lcd.clear();
+    lcd.print("Connexion WiFi");
+
     // Connect to WPA/WPA2 network. Change this line if using open or WEP network:
 
     status = WiFi.begin(ssid, password);
@@ -74,7 +84,9 @@ void setup() {
 
   Serial.println("Connected to wifi");
 
-  //printWifiStatus();
+  lcd.clear();
+  lcd.print("WiFi connecte !");
+  delay(1500);
 }
 
 void loop() {
@@ -85,6 +97,10 @@ void loop() {
   int err = dht11.read(&temperature, &humidity, NULL);
   if (err != SimpleDHTErrSuccess) {
     Serial.println("Erreur de lecture du capteur DHT11");
+    lcd.clear();
+    lcd.print("Erreur capteur");
+    lcd.setCursor(0, 1);
+    lcd.print("DHT11 !");
     delay(2000);
     return;
   }
@@ -95,6 +111,18 @@ void loop() {
   Serial.print(" C, Humidité: ");
   Serial.print(humidity);
   Serial.println(" %");
+
+  // Affichage sur le LCD (fonctionne meme si le serveur/PC est eteint)
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("Temp: ");
+  lcd.print(temperature);
+  lcd.print((char)223); // symbole degre
+  lcd.print("C");
+  lcd.setCursor(0, 1);
+  lcd.print("Humidite: ");
+  lcd.print(humidity);
+  lcd.print("%");
 
   // Connexion au serveur pour envoyer les données
   if (client.connect(server, 80)) {
@@ -117,8 +145,9 @@ void loop() {
     }
   } else {
     Serial.println("Erreur de connexion au serveur");
+    // Le LCD affiche quand meme temp/humidite ci-dessus, indépendamment de cette erreur
   }
 
   client.stop(); // Fermer la connexion
-  delay(1000*300); // Attendre 5 minutes avant la prochaine lecture (300 000 ms)
+  delay(1000*30); // Attendre 5 minutes avant la prochaine lecture (300 000 ms)
 }
